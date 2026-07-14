@@ -347,6 +347,49 @@
     .dashboard-grid{ grid-template-columns: 1fr 1fr; }
     .skill-row{ grid-template-columns: 110px 1fr 50px; gap: 10px; padding: 14px; }
   }
+
+  /* ---------- BACK TO TOP ---------- */
+  #backToTop{
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: #0a0e13;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    z-index: 60;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  }
+  #backToTop.show{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  #backToTop:hover{
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 640px){
+    #backToTop{
+      bottom: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -579,6 +622,8 @@
   </div>
 </footer>
 
+<button id="backToTop" aria-label="Back to top">↑</button>
+
 <script>
   // Animate metric counters
   document.querySelectorAll('.m-value[data-target]').forEach(el => {
@@ -592,45 +637,17 @@
     }, 35);
   });
 
-  // Generate bar chart
-// Generate toolkit proficiency chart
-const bars = document.getElementById('bars');
-
-const tools = [
-  { name: "SQL", value: 92 },
-  { name: "Power BI", value: 95 },
-  { name: "Looker", value: 85 },
-  { name: "Tableau", value: 75 },
-  { name: "Google Analytics", value: 80 },
-  { name: "Big Query", value: 70 },
-  { name: "R", value: 80 },
-  { name: "Python", value: 85 }
-];
-
-tools.forEach((tool, i) => {
-
-  const wrapper = document.createElement('div');
-  wrapper.className = "bar-wrapper";
-
-  const value = document.createElement('span');
-  value.className = "bar-value";
-  value.textContent = tool.value + "%";
-
-  const bar = document.createElement('div');
-  bar.className = "bar";
-  bar.style.height = tool.value + "%";
-  bar.style.animationDelay = (i * 0.08) + 's';
-
-  const label = document.createElement('span');
-  label.className = "bar-label";
-  label.textContent = tool.name;
-
-  wrapper.appendChild(value);
-  wrapper.appendChild(bar);
-  wrapper.appendChild(label);
-
-  bars.appendChild(wrapper);
-
+  // Back to top button
+  const backToTopBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+      backToTopBtn.classList.add('show');
+    } else {
+      backToTopBtn.classList.remove('show');
+    }
+  });
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 
